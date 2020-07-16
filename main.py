@@ -11,11 +11,11 @@ import curses
 import argparse
 import time
 import datetime as dt
+import pyfiglet
 
 def print_screen(screen,text):
   screen.addstr(0,0,text)
   screen.refresh()
-
 
 class Pomodoro:
 
@@ -80,16 +80,26 @@ def main(screen=None):
   if not screen : curses.wrapper(main)
   else:
     #print(args)
+    curses.curs_set(0)
+    curses.use_default_colors()
+
     pomo = Pomodoro(1,2)
     pomo.start()
     screen.clear()
     while True:
       # Pomodora started
+      now = dt.datetime.now()
       pom_end_time = pomo.pomo_end_time
+      break_end_time = pomo.break_end_time
       pom_state = pomo.get_state()
       pom_start_time = pomo.start_time
-      print_screen(screen,f'{pom_state} and {pom_end_time} - start is {pom_start_time}')
-      screen.refresh()
+      if pom_state == "pomo":
+        time_left = pom_end_time - now
+      else :
+        time_left = break_end_time - now
+      time_left = str(time_left).split(".")[0]
+      time_left_text = pyfiglet.figlet_format(f'{time_left}',font="small")
+      print_screen(screen,time_left_text)
       time.sleep(5)
 
 if __name__ == "__main__": main()

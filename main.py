@@ -13,8 +13,24 @@ import time
 import datetime as dt
 import pyfiglet
 
-def print_screen(screen,text):
-  screen.addstr(0,0,text)
+def print_screen(screen,text,center=True):
+  x = 0
+  y = 0
+
+  if center == True :
+    num_rows, num_cols = screen.getmaxyx()
+    middle_row = int(num_rows / 2)
+    middle_col = int(num_cols / 2)
+
+    lines = text.rstrip("\n").split("\n")
+    longest_line = max(map(len,lines))
+
+    y = middle_row - int(len(lines) / 2)
+    x = middle_col - int(longest_line / 2)
+
+  for line in lines:
+    screen.addstr(y,x,(" " * 10) + line + (" " * 10) + "\n", curses.color_pair(1))
+    y = y + 1
   screen.refresh()
 
 class Pomodoro:
@@ -82,6 +98,7 @@ def main(screen=None):
     #print(args)
     curses.curs_set(0)
     curses.use_default_colors()
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
 
     pomo = Pomodoro(1,2)
     pomo.start()
@@ -98,8 +115,8 @@ def main(screen=None):
       else :
         time_left = break_end_time - now
       time_left = str(time_left).split(".")[0]
-      time_left_text = pyfiglet.figlet_format(f'{time_left}',font="small")
+      time_left_text = pyfiglet.figlet_format(f'{time_left}',font="block")
       print_screen(screen,time_left_text)
-      time.sleep(5)
+      time.sleep(1)
 
 if __name__ == "__main__": main()

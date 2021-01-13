@@ -12,6 +12,33 @@ import argparse
 import time
 import datetime as dt
 
+
+class Pomodoro:
+
+  def __init__(self,work_time=25,break_time=5):
+    self.work_secs=work_time*60
+    self.break_secs=break_time*60
+    self.breaks = 0
+
+  def start(self):
+    self.start_time = dt.datetime.now()
+    self.pomo_end_time = self.start_time + dt.timedelta(seconds=self.work_secs)
+    self.break_end_time = self.start_time + dt.timedelta(seconds=self.work_secs+self.break_secs)
+  
+  def get_state(self):
+    now = dt.datetime.now()
+
+    if now < self.pomo_end_time:
+      return "pomo"
+    elif now <= self.break_end_time:
+      return "break"
+    else:
+      return "done"
+
+  def restart(self):
+    self.breaks += 1
+    self.start()
+
 def get_time_display(time_text):
   a = "####" 
   b = "#  #"
@@ -60,44 +87,13 @@ def print_screen(screen,text):
     y = y + 1
   screen.refresh()
 
-class Pomodoro:
-
-  def __init__(self,work_time=25,break_time=5):
-    self.work_secs=work_time*60
-    self.break_secs=break_time*60
-    self.breaks = 0
-
-  def start(self):
-    self.start_time = dt.datetime.now()
-    self.pomo_end_time = self.start_time + dt.timedelta(seconds=self.work_secs)
-    self.break_end_time = self.start_time + dt.timedelta(seconds=self.work_secs+self.break_secs)
-  
-  def get_state(self):
-    now = dt.datetime.now()
-
-    if now < self.pomo_end_time:
-      return "pomo"
-    elif now <= self.break_end_time:
-      return "break"
-    else:
-      return "done"
-
-  def restart(self):
-    self.breaks += 1
-    self.start()
-
 def init_args():
   """ This is executed when run from the command line """
   parser = argparse.ArgumentParser()
 
-  # Required positional argument
-  #parser.add_argument("arg", help="Required positional argument")
-
-  # Optional argument flag which defaults to False
-  parser.add_argument("-f", "--flag", action="store_true", default=False)
-
   # Optional argument which requires a parameter (eg. -d test)
-  parser.add_argument("-n", "--name", action="store", dest="name")
+  parser.add_argument("-w", "--work", default=25, type=float, action="store", dest="work_mins", help="Number of miinutes for work")
+  parser.add_argument("-b", "--break", default=5, type=float, action="store", dest="break_mins", help="Number of minutes for break")
 
   # Optional verbosity counter (eg. -v, -vv, -vvv, etc.)
   parser.add_argument(
@@ -116,10 +112,10 @@ def init_args():
   args = parser.parse_args()
   return args
 
-args = init_args()
-
 def main(screen=None):
 
+  args = init_args()
+  
   if not screen : curses.wrapper(main)
   else:
     #print(args)
@@ -127,7 +123,7 @@ def main(screen=None):
     curses.use_default_colors()
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
 
-    pomo = Pomodoro(.5,1)
+    pomo = Pomodoro(args.work_mins,args.break_mins)
     pomo.start()
     screen.clear()
     while True:

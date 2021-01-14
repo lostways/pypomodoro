@@ -18,7 +18,7 @@ class Pomodoro:
   def __init__(self,work_time=25,break_time=5):
     self.work_secs=work_time*60
     self.break_secs=break_time*60
-    self.breaks = 0
+    self.pomo_number = 1
 
   def start(self):
     self.start_time = dt.datetime.now()
@@ -36,7 +36,7 @@ class Pomodoro:
       return "done"
 
   def restart(self):
-    self.breaks += 1
+    self.pomo_number += 1
     self.start()
 
 def get_time_display(time_text):
@@ -112,7 +112,21 @@ def init_args():
   args = parser.parse_args()
   return args
 
+def handle_screen_input(screen):
+  key_pressed = ''
+  try:
+    key = screen.getkey()
+  except curses.error as e:
+    if str(e) == 'no input': return ''
+    raise e
+  return key
+
 def main(screen=None):
+  state_text = {
+      'pomo' : 'Time to work',
+      'break': 'Take a break',
+      'done': 'Press space to get back to work'
+  }
 
   args = init_args()
   
@@ -122,12 +136,17 @@ def main(screen=None):
     curses.curs_set(0)
     curses.use_default_colors()
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    screen.nodelay(True)
 
     pomo = Pomodoro(args.work_mins,args.break_mins)
     pomo.start()
     screen.clear()
     while True:
       # Pomodora started
+      key_pressed = handle_screen_input(screen)
+      if key_pressed == 'q':
+        exit(0);
+
       now = dt.datetime.now()
       pom_end_time = pomo.pomo_end_time
       break_end_time = pomo.break_end_time
@@ -136,13 +155,16 @@ def main(screen=None):
       if pom_state == "pomo":
         time_left = pom_end_time - now
       elif pom_state == "done":
+        if key_pressed == ' ':
+          pomo.restart()
+          continue
         time_left = "00:00:00"
       else :
         time_left = break_end_time - now
       time_left = str(time_left).split(".")[0]
       time_left = "{:0>8}".format(time_left)
       display_text = get_time_display(time_left)
-      display_text = display_text + "\n" + pom_state
+      display_text = display_text + "\n" + state_text[pom_state] + "\nPomo: " + str(pomo.pomo_number)
       print_screen(screen,display_text)
       time.sleep(1)
 

@@ -152,19 +152,26 @@ def main(screen=None):
       break_end_time = pomo.break_end_time
       pom_state = pomo.get_state()
       pom_start_time = pomo.start_time
+
       if pom_state == "pomo":
         time_left = pom_end_time - now
       elif pom_state == "done":
+        time_left = "00:00:00"
         if key_pressed == ' ':
           pomo.restart()
           continue
-        time_left = "00:00:00"
       else :
         time_left = break_end_time - now
+
+      display_info = state_text[pom_state]
+
+      if key_pressed != '':
+        display_info = "press 'q' to quit"
+
       time_left = str(time_left).split(".")[0]
       time_left = "{:0>8}".format(time_left)
       display_text = get_time_display(time_left)
-      display_text = display_text + "\n" + state_text[pom_state] + "\nPomo: " + str(pomo.pomo_number)
+      display_text = display_text + "\n" + display_info
       print_screen(screen,display_text)
       time.sleep(1)
 

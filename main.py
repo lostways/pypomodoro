@@ -91,18 +91,10 @@ def init_args():
   """ This is executed when run from the command line """
   parser = argparse.ArgumentParser()
 
-  # Optional argument which requires a parameter (eg. -d test)
   parser.add_argument("-w", "--work", default=25, type=float, action="store", dest="work_mins", help="Number of miinutes for work")
   parser.add_argument("-b", "--break", default=5, type=float, action="store", dest="break_mins", help="Number of minutes for break")
-
-  # Optional verbosity counter (eg. -v, -vv, -vvv, etc.)
-  parser.add_argument(
-      "-v",
-      "--verbose",
-      action="count",
-      default=0,
-      help="Verbosity (-v, -vv, etc)")
-
+  parser.add_argument("-v", "--verbose", action="store_true", help="Move detailed display")
+  
   # Specify output of "--version"
   parser.add_argument(
       "--version",
@@ -166,8 +158,12 @@ def main(screen=None):
       display_info = state_text[pom_state]
 
       if key_pressed != '':
-        display_info = "press 'q' to quit"
-
+        display_info = "Press 'q' to quit"
+      
+      if args.verbose:
+        display_info += "\n" + f"Pomo number: {pomo.pomo_number}"
+        display_info += "\n" + f"Pomo end time: {pomo.pomo_end_time:%H:%M:%S}"
+        display_info += "\n" + f"Break end time: {pomo.break_end_time:%H:%M:%S%z}"
       time_left = str(time_left).split(".")[0]
       time_left = "{:0>8}".format(time_left)
       display_text = get_time_display(time_left)

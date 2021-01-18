@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="pypomodoro",
-    version="0.3.0",
+    version="0.4.0",
     description="Displays a full screen pomodoro timer in the terminal",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -23,6 +23,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
+    packages=find_packages(),
     entry_points = {
       'console_scripts': ['pypomodoro=pypomodoro.main:main']
     },

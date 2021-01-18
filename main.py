@@ -127,7 +127,7 @@ def main(screen=None):
     #print(args)
     curses.curs_set(0)
     curses.use_default_colors()
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(1, curses.COLOR_RED, -1)
     screen.nodelay(True)
 
     pomo = Pomodoro(args.work_mins,args.break_mins)

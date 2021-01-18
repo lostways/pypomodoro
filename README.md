@@ -2,10 +2,16 @@
 
 Displays a full screen [Pomodoo](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer in your terminal. 
 
+## Installation
+
+```bash
+pip install pypomodoro
+```
+
 ## Usage
 
 ```
-usage: main.py [-h] [-w WORK_MINS] [-b BREAK_MINS] [-v] [--version]
+pypomodoro [-h] [-w WORK_MINS] [-b BREAK_MINS] [-v] [--version]
 
 optional arguments:
   -h, --help            show this help message and exit

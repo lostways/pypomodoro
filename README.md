@@ -8,6 +8,10 @@ Displays a full screen [Pomodoo](https://en.wikipedia.org/wiki/Pomodoro_Techniqu
 pip install pypomodoro
 ```
 
+## Screenshot
+
+![Screenshot](screenshot.png)
+
 ## Usage
 
 ```

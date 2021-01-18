@@ -19,13 +19,20 @@ class Pomodoro:
     self.work_secs=work_time*60
     self.break_secs=break_time*60
     self.pomo_number = 1
+    self.start_time = None
+    self.pomo_end_time = None
+    self.break_end_time = None
+    self.started = False
 
   def start(self):
     self.start_time = dt.datetime.now()
     self.pomo_end_time = self.start_time + dt.timedelta(seconds=self.work_secs)
     self.break_end_time = self.start_time + dt.timedelta(seconds=self.work_secs+self.break_secs)
+    self.started = True
   
   def get_state(self):
+    if self.started == False : return "init"
+
     now = dt.datetime.now()
 
     if now < self.pomo_end_time:
@@ -117,8 +124,10 @@ def main(screen=None):
   state_text = {
       'pomo' : 'Time to work',
       'break': 'Take a break',
-      'done': 'Press space to get back to work'
+      'done': 'Press space to get back to work',
+      'init': 'Press space to start work'
   }
+  time_left_init = "00:00:00"
 
   args = init_args()
   
@@ -131,24 +140,29 @@ def main(screen=None):
     screen.nodelay(True)
 
     pomo = Pomodoro(args.work_mins,args.break_mins)
-    pomo.start()
     screen.clear()
     while True:
-      # Pomodora started
+      pom_state = pomo.get_state()
+
       key_pressed = handle_screen_input(screen)
+
       if key_pressed == 'q':
         exit(0);
 
       now = dt.datetime.now()
       pom_end_time = pomo.pomo_end_time
       break_end_time = pomo.break_end_time
-      pom_state = pomo.get_state()
       pom_start_time = pomo.start_time
 
-      if pom_state == "pomo":
+      if pom_state == "init":
+        time_left = time_left_init
+        if key_pressed == ' ':
+          pomo.start()
+          continue
+      elif pom_state == "pomo":
         time_left = pom_end_time - now
       elif pom_state == "done":
-        time_left = "00:00:00"
+        time_left = time_left_init
         if key_pressed == ' ':
           pomo.restart()
           continue

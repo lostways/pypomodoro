@@ -174,7 +174,7 @@ def main(screen=None):
       if key_pressed != '':
         display_info = "Press 'q' to quit"
       
-      if args.verbose:
+      if args.verbose and pom_state != "init":
         display_info += "\n" + f"Pomo number: {pomo.pomo_number}"
         display_info += "\n" + f"Pomo end time: {pomo.pomo_end_time:%H:%M:%S}"
         display_info += "\n" + f"Break end time: {pomo.break_end_time:%H:%M:%S%z}"

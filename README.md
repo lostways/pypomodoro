@@ -4,8 +4,8 @@ Displays a full screen [Pomodoo](https://en.wikipedia.org/wiki/Pomodoro_Techniqu
 
 ## Usage
 
-```bash
-sage: main.py [-h] [-w WORK_MINS] [-b BREAK_MINS] [-v] [--version]
+```
+usage: main.py [-h] [-w WORK_MINS] [-b BREAK_MINS] [-v] [--version]
 
 optional arguments:
   -h, --help            show this help message and exit

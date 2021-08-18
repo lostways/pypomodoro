@@ -27,3 +27,14 @@ optional arguments:
   --version             show program's version number and exit
 ```
 
+## Development
+
+Install dev dependencies
+```bash
+pip install -r requirements-dev.txt
+```
+
+Run Tests
+```bash
+./test.py
+```

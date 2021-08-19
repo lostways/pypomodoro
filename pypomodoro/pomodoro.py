@@ -1,13 +1,14 @@
 from dataclasses import dataclass, field
+import typing
 import datetime as dt
 
 @dataclass
 class Pomodoro:
     work_time: int
     break_time: int
-    start_time: dt.datetime = field(init=False)
-    pomo_end_time: dt.datetime = field(init=False)
-    break_end_time: dt.datetime = field(init=False)
+    start_time: typing.Optional[dt.datetime] = field(default=None,init=False)
+    pomo_end_time: typing.Optional[dt.datetime] = field(default=None,init=False)
+    break_end_time: typing.Optional[dt.datetime] = field(default=None,init=False)
     pomo_number: int = field(default=1,init=False)
     started: bool = field(default=False,init=False)
 
@@ -17,12 +18,10 @@ class Pomodoro:
 
         self.start_time = self._get_time()
         self.pomo_end_time = self.start_time + dt.timedelta(seconds=work_secs)
-        self.break_end_time = self.start_time + dt.timedelta(
-            seconds=work_secs + break_secs
-        )
+        self.break_end_time = self.pomo_end_time + dt.timedelta(seconds=break_secs)
         self.started = True
 
-    def get_state(self):
+    def get_state(self) -> str:
         if self.started == False:
             return "init"
 

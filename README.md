@@ -29,12 +29,15 @@ optional arguments:
 
 ## Development
 
-Install dev dependencies
+Create virtual env and install dev dependencies
 ```bash
-pip install -r requirements-dev.txt
+make init
 ```
-
-Run Tests
+Run tests in venv
 ```bash
-./test.py
+make test
+```
+Run the app in venv
+```bash
+make run
 ```

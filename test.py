@@ -13,6 +13,11 @@ class TestPomodoro(unittest.TestCase):
         pom = Pomodoro(work_time=10,break_time=5)
         self.assertEqual(pom.pomo_number,1)
         self.assertEqual(pom.started,False)
+        self.assertEqual(pom.start_time,None)
+        self.assertEqual(pom.pomo_end_time,None)
+        self.assertEqual(pom.break_end_time,None)
+        self.assertEqual(pom.work_time,10)
+        self.assertEqual(pom.break_time,5)
 
     def test_start(self):
         WORK_TIME = 10

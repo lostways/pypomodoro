@@ -2,12 +2,21 @@
 Gui classs: handles printing to the screen and user input
 """
 import curses
+from typing import Tuple
 
 class Gui:
 
     def __init__(self,screen):
-        self.screen = screen
+        curses.curs_set(0)
+        curses.use_default_colors()
+        curses.init_pair(1, curses.COLOR_RED, -1)
 
+        self.screen = screen
+        self.screen.nodelay(True)
+
+    def clear_screen(self):
+        self.screen.clear()
+        
     def get_time_display(self,time_text) -> str:
       a = "####" 
       b = "#  #"
@@ -37,20 +46,26 @@ class Gui:
       return out
       
     def print_screen(self,text):
-      x = 0
-      y = 0
+        lines = text.rstrip("\n").split("\n")
+        y,x = self.get_center_start(lines)
+        self.display_lines(lines,y,x)
 
-      num_rows, num_cols = self.screen.getmaxyx()
-      middle_row = int(num_rows / 2)
-      middle_col = int(num_cols / 2)
-     
+    def get_center_start(self, lines: list[str]) -> Tuple[int,int]:
+        x = 0
+        y = 0
 
-      lines = text.rstrip("\n").split("\n")
-      longest_line = max(map(len,lines))
+        num_rows, num_cols = self.screen.getmaxyx()
+        middle_row = int(num_rows / 2)
+        middle_col = int(num_cols / 2)
 
-      y = middle_row - int(len(lines) / 2)
-      x = middle_col - int(longest_line / 2)
+        longest_line = max(map(len,lines))
 
+        y = middle_row - int(len(lines) / 2)
+        x = middle_col - int(longest_line / 2)
+
+        return y,x
+
+    def display_lines(self, lines: list[str], y: int, x: int):
       for line in lines:
         self.screen.addstr(y,x,line + "\n", curses.color_pair(1))
         y = y + 1

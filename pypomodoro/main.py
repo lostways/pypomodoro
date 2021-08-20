@@ -32,30 +32,22 @@ def init_args():
   args = parser.parse_args()
   return args
 
-
-def main(screen=None):
-  state_text = {
+def start(screen):
+    state_text = {
       'pomo' : 'Time to work',
       'break': 'Take a break',
       'done': 'Press space to get back to work',
       'init': 'Press space to start work'
-  }
-  time_left_init = "00:00:00"
+    }
+    time_left_init = "00:00:00"
 
-  args = init_args()
-  
-  if not screen : curses.wrapper(main)
-  else:
-    #print(args)
-    curses.curs_set(0)
-    curses.use_default_colors()
-    curses.init_pair(1, curses.COLOR_RED, -1)
-    screen.nodelay(True)
+    args = init_args()
 
     pomo = Pomodoro(args.work_mins,args.break_mins)
     gui = Gui(screen)
 
-    screen.clear()
+    gui.clear_screen()
+
     while True:
       pom_state = pomo.get_state()
 
@@ -99,5 +91,12 @@ def main(screen=None):
       display_text = display_text + "\n" + display_info
       gui.print_screen(display_text)
       time.sleep(1)
+
+def main(screen=None):
+  
+  if not screen:
+      curses.wrapper(main)
+  else:
+    start(screen)
 
 if __name__ == "__main__": main()

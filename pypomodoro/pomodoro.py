@@ -1,25 +1,27 @@
+from dataclasses import dataclass, field
+import typing
 import datetime as dt
 
-
+@dataclass
 class Pomodoro:
-    def __init__(self, work_time=25, break_time=5):
-        self.work_secs = work_time * 60
-        self.break_secs = break_time * 60
-        self.pomo_number = 1
-        self.start_time = None
-        self.pomo_end_time = None
-        self.break_end_time = None
-        self.started = False
+    work_time: int
+    break_time: int
+    start_time: typing.Optional[dt.datetime] = field(default=None,init=False)
+    pomo_end_time: typing.Optional[dt.datetime] = field(default=None,init=False)
+    break_end_time: typing.Optional[dt.datetime] = field(default=None,init=False)
+    pomo_number: int = field(default=1,init=False)
+    started: bool = field(default=False,init=False)
 
     def start(self):
+        work_secs = self.work_time * 60
+        break_secs = self.break_time * 60
+
         self.start_time = self._get_time()
-        self.pomo_end_time = self.start_time + dt.timedelta(seconds=self.work_secs)
-        self.break_end_time = self.start_time + dt.timedelta(
-            seconds=self.work_secs + self.break_secs
-        )
+        self.pomo_end_time = self.start_time + dt.timedelta(seconds=work_secs)
+        self.break_end_time = self.pomo_end_time + dt.timedelta(seconds=break_secs)
         self.started = True
 
-    def get_state(self):
+    def get_state(self) -> str:
         if self.started == False:
             return "init"
 

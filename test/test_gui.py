@@ -30,4 +30,16 @@ class TestGui(unittest.TestCase):
         self.assertEqual(time_display, expected_display_text)
 
     def test_get_center_start(self):
-        pass
+        # Text: 3 lines, longest line is 20chars 
+        text = "aaaaaaaaaaaaaaaaaaaa\nbbbbbbbbbbbbb\naaaaaaaaaaaa"
+
+        num_rows, num_cols = self.screen.getmaxyx()
+        middle_row = int(num_rows / 2)
+        middle_col = int(num_cols / 2)
+
+        expected_y = middle_row - int(3/2)
+        expected_x = middle_col - int(20/2)
+
+        center_start = self.gui.get_center_start(text.splitlines())
+
+        self.assertEqual(center_start, (expected_y, expected_x))

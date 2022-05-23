@@ -12,8 +12,8 @@ import argparse
 import time
 import datetime as dt
 
-from pomodoro import Pomodoro
-from gui import Gui
+from .pomodoro import Pomodoro
+from .gui import Gui
 
 def init_args():
   """ This is executed when run from the command line """

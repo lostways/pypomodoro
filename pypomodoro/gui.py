@@ -16,6 +16,9 @@ class Gui:
 
     def clear_screen(self):
         self.screen.clear()
+
+    def beep(self):
+      curses.beep()
         
     def get_time_display(self,time_text) -> str:
       a = "####" 

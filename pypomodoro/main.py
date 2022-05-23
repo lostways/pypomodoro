@@ -4,7 +4,7 @@ Pomodoro
 """
 
 __author__ = "Andrew Lowe"
-__version__ = "0.6.1"
+__version__ = "0.7.0"
 __license__ = "MIT"
 
 import curses

@@ -37,7 +37,8 @@ Run tests in venv
 ```bash
 make test
 ```
-Run the app in venv
+Install the package and run the app in venv
 ```bash
+make install
 make run
 ```

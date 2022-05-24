@@ -1,4 +1,4 @@
-.PHONY: init build run unittest test
+.PHONY: init install clean run test
 
 VENV_PROMPT = pypomo
 APP_ENTRY = pypomodoro/main.py
@@ -12,7 +12,8 @@ PIP = $(VENV)/bin/pip
 help:
 	@echo "Run make <target> with:"
 	@echo "  init - creates venv and installs dependencies"
-	@echo "  run - runs app"
+	@echo "  install - installs "
+	@echo "  run - runs app "
 	@echo "  test - runs tests"
 
 $(VENV)/bin/activate : requirements-dev.txt
@@ -21,12 +22,23 @@ $(VENV)/bin/activate : requirements-dev.txt
 
 init: $(VENV)/bin/activate
 
+install: clean
+	 $(PYTHON) setup.py install
+
 run: $(VENV)/bin/activate
 	 $(PYTHON) $(APP_ENTRY)
 
 test: $(VENV)/bin/activate
 	$(PYTHON) -m unittest -v
 
-clean:
-	find . -type d -name "__pycache__" | xargs rm -rf {};
-	rm -rf $(VENV)
+clean: clean-build clean-pyc ## remove all build and Python artifacts
+
+clean-build: ## remove build artifacts
+	rm -fr build/
+	rm -fr dist/
+
+clean-pyc: ## remove Python file artifacts
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
